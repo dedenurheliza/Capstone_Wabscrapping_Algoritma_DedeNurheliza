@@ -71,17 +71,21 @@ movie['Metascore'] = movie['Metascore'].astype(float)
 movie['Vote'] = movie['Vote'].str.replace(',', '') #change , to .
 movie['Vote'] = movie['Vote'].astype(float) #change to float
 
+#default 7 top movie
 basetop=movie
 
+#get data from not nan metascore and high rate
 basetop2 = movie.groupby('Movie Title').agg({
     'Metascore': 'mean',
     'IMDb_rating': 'mean'
 }).sort_values(by='Metascore',ascending=False).dropna().sort_values(by='IMDb_rating',ascending=False).reset_index()
 
+#take data vote >150.000
 d=movie['Vote']>150000
 movie['Movie Title']=movie['Movie Title'][d]
 movie.sort_values('Movie Title',inplace=True)
 
+#get data from not nan metascore and high rate (vote>150.000)
 basetop3 = movie.groupby('Movie Title').agg({
     'Metascore': 'mean',
     'IMDb_rating': 'mean'
